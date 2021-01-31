@@ -1,0 +1,22 @@
+{
+    "name": "xanweb/c5-page-info",
+    "description": "Concrete5 Page Info",
+    "keywords": ["concrete5", "concrete5-v8", "helpers"],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "xanweb/c5-common": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xanweb\\PageInfo\\": ""
+        }
+    },
+    "suggest": {
+        "xanweb/c5-helpers": "To use Xanweb\\PageInfo\\Fetcher\\BlockPropertyFetcher, BASIC and ADVANCED configs"
+    },
+    "support": {
+        "source": "https://github.com/xanweb/c5-page-info"
+    }
+}
