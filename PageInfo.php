@@ -109,16 +109,38 @@ class PageInfo
     /**
      * Get Publish Date.
      *
-     * @param string|null $format The custom format (see http://www.php.net/manual/en/function.date.php for applicable formats)
+     * @param string|null $format can be 'full', 'long', 'medium' or 'short' (see \Localization\Service\Date::formatDate()#$format)
+     * or a custom format (see http://www.php.net/manual/en/function.date.php for applicable formats)
      *
      * @return string
      * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getPublishDate(?string $format = null): string
     {
         $datePublic = $this->page->getCollectionDatePublic();
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $format ? $this->dh->formatCustom($format, $datePublic) : $this->dh->formatDate($datePublic);
+        if ($format === null || in_array($format, ['full', 'long', 'medium', 'short'])) {
+            return $this->dh->formatDate($datePublic, $format ?? 'short');
+        }
+
+        return $this->dh->formatCustom($format, $datePublic);
+    }
+
+    /**
+     * Get Publish DateTime.
+     *
+     * @param bool $longDate Set to true for the long date format (eg 'December 31, 2000 at ...'), false (default) for the short format (eg '12/31/2000 at ...')
+     * @param bool $withSeconds Set to true to include seconds (eg '... at 11:59:59 PM'), false (default) otherwise (eg '... at 11:59 PM');
+     *
+     * @return string
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    public function getPublishDateTime(bool $longDate = false, bool $withSeconds = false): string
+    {
+        $datePublic = $this->page->getCollectionDatePublic();
+
+        return $this->dh->formatDateTime($datePublic, $longDate, $withSeconds);
     }
 
     /**
