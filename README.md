@@ -58,7 +58,10 @@ $config->registerThumbnailFetcher(new BlockPropertyFetcher(
     )
 );
 
-Xanweb\PageInfo\ConfigManager::get()->register('my_cfg_key', $config);
+$cfgManager = Xanweb\PageInfo\ConfigManager::get();
+$cfgManager->register('my_cfg_key', $config);
+
+$myConfig = $cfgManager->getConfig('my_cfg_key');
 ```
 
 ## Predefined Configs
@@ -74,8 +77,13 @@ Xanweb\PageInfo\ConfigManager::get()->register('my_cfg_key', $config);
     * <b>Page Name:</b> [Page Title Block, Page Name Property]
     * <b>Page Description:</b> [Page Description Property]
     * <b>Thumbnail:</b> ['thumbnail' attribute, Image Block]    
-   *If 'page_heading' block (Custom block by Xanweb) is installed, then it will be:*
+*If 'page_heading' block (Custom block by Xanweb) is installed, then it will be:*
    * <b>Page Name:</b> [Page Heading Block, Page Name Property]
    * <b>Page Description:</b> [Page Heading Block, Page Description Property]
    * <b>Thumbnail:</b> ['thumbnail' attribute, Image Block]   
-      
+   
+Example of using predefined config:
+```php
+$myConfig = Xanweb\PageInfo\ConfigManager::getBasic();
+$pageInfoFactory = new Xanweb\PageInfo\Factory($myConfig);
+```
