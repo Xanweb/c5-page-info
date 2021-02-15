@@ -31,17 +31,28 @@ class Factory
     private $config;
 
     /**
+     * @var string
+     */
+    private $pageInfoClass;
+
+    /**
      * Factory constructor.
      *
      * @param Config|null $config
+     * @param string $pageInfoClass
      */
-    public function __construct(?Config $config = null)
+    public function __construct(?Config $config = null, string $pageInfoClass = PageInfo::class)
     {
+        if ($pageInfoClass !== PageInfo::class && !is_subclass_of($pageInfoClass, PageInfo::class)) {
+            throw new \InvalidArgumentException(t('%s:%s - `%s` should be an instance of `%s`', static::class, '__construct', $pageInfoClass, PageInfo::class));
+        }
+
         $app = $this->app();
         $this->urlResolver = $app->make(PageUrlResolver::class);
         $this->dh = $app->make('date');
         $this->th = $app->make('helper/text');
         $this->config = $config ?? ConfigManager::getDefault();
+        $this->pageInfoClass = $pageInfoClass;
     }
 
     /**
@@ -73,7 +84,7 @@ class Factory
     {
         $pageInfo = null;
         if ($page->getError() !== COLLECTION_NOT_FOUND) {
-            $pageInfo = new PageInfo($page, $this->urlResolver, $this->th, $this->dh, $this->config);
+            $pageInfo = new $this->pageInfoClass($page, $this->urlResolver, $this->th, $this->dh, $this->config);
         }
 
         return $pageInfo;
