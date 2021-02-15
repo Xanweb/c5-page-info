@@ -5,6 +5,7 @@ namespace Xanweb\PageInfo;
 use Concrete\Core\Entity\File\File;
 use Concrete\Core\Localization\Service\Date;
 use Concrete\Core\Page\Page;
+use Concrete\Core\Support\Facade\UserInfo;
 use Concrete\Core\Url\Resolver\PageUrlResolver;
 use Concrete\Core\Utility\Service\Text;
 use League\URL\URLInterface;
@@ -14,27 +15,42 @@ class PageInfo
     /**
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * @var PageUrlResolver
      */
-    private $urlResolver;
+    protected $urlResolver;
 
     /**
      * @var Text
      */
-    private $th;
+    protected $th;
 
     /**
      * @var Date
      */
-    private $dh;
+    protected $dh;
 
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
+
+    /**
+     * @var URLInterface
+     */
+    private $url;
+
+    /**
+     * @var \Concrete\Core\User\UserInfo
+     */
+    private $pageAuthor;
+
+    /**
+     * @var \Concrete\Core\User\UserInfo
+     */
+    private $lastEditor;
 
     public function __construct(Page $page, PageUrlResolver $urlResolver, Text $th, Date $dh, Config $config)
     {
@@ -84,13 +100,38 @@ class PageInfo
     }
 
     /**
+     * Get Page Author.
+     *
+     * @return \Concrete\Core\User\UserInfo|null
+     */
+    public function getAuthor(): ?\Concrete\Core\User\UserInfo
+    {
+        return $this->pageAuthor ?? $this->pageAuthor = UserInfo::getByID((int) $this->page->getCollectionUserID());
+    }
+
+    /**
+     * Get Latest Version Author.
+     *
+     * @return \Concrete\Core\User\UserInfo|null
+     */
+    public function getLastEditor(): ?\Concrete\Core\User\UserInfo
+    {
+        if (!isset($this->lastEditor)) {
+            $cvAuthorID = (int) $this->page->getVersionObject()->getVersionAuthorUserID();
+            $this->lastEditor = UserInfo::getByID($cvAuthorID);
+        }
+
+        return $this->lastEditor;
+    }
+
+    /**
      * Get Page URL.
      *
      * @return URLInterface
      */
     public function getURL(): ?URLInterface
     {
-        return $this->urlResolver->resolve([$this->page]);
+        return $this->url ?? $this->url = $this->urlResolver->resolve([$this->page]);
     }
 
     /**
