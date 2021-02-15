@@ -21,7 +21,7 @@ class ConfigManager
     public const ADVANCED = 'advanced';
 
     /**
-     * @var Config[]
+     * @var Config[]|callable[]
      */
     private $configs = [];
 
@@ -29,11 +29,21 @@ class ConfigManager
      * Register Config.
      *
      * @param string $configKey
-     * @param Config $config
+     * @param Config|callable $config
      */
-    public function register(string $configKey, Config $config): void
+    public function register(string $configKey, $config): void
     {
-        $this->configs[$configKey] = $config;
+        if ($config instanceof Config || is_callable($config)) {
+            $this->configs[$configKey] = $config;
+        }
+
+        throw new \InvalidArgumentException(t(
+            '%s:%s - `%s` should be an instance of `%s`',
+            static::class,
+            '__construct',
+            '$config',
+            Config::class . ' or callable'
+        ));
     }
 
     /**
@@ -56,7 +66,11 @@ class ConfigManager
     public function getConfig(string $configKey): ?Config
     {
         if (isset($this->configs[$configKey])) {
-            return $this->configs[$configKey];
+            if (is_callable($config = $this->configs[$configKey])) {
+                $this->configs[$configKey] = $config = $config();
+            }
+
+            return $config;
         }
 
         // Register predefined configs
