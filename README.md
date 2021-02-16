@@ -13,8 +13,8 @@ composer require xanweb/c5-page-info
 
 ## Simple usage example
 ```php
-$pageInfoFactory = new Xanweb\PageInfo\Factory($myConfig); // We can pass our own config (Check `Config Management` section), otherwise default config will be used.
-foreach ($pages as $page):
+$pageInfoFactory = new Xanweb\PageInfo\Factory(); // We can pass our own config (Check `Config Management` section), otherwise default config will be used.
+foreach ($pages as $page) {
     $pageInfo = $pageInfoFactory->build($page);
     $pageName = $pageInfo->fetchPageName(); // Page name with htmlentites applied
     $pageDescription = $pageInfo->fetchPageDescription($truncateChars); // $truncateChars: an optional argument can be passed to truncate description
@@ -59,7 +59,15 @@ $config->registerThumbnailFetcher(new BlockPropertyFetcher(
 );
 
 $cfgManager = Xanweb\PageInfo\ConfigManager::get();
+
 $cfgManager->register('my_cfg_key', $config);
+// You can also register a callable, the config then will be created only it's called
+$cfgManager->register('my_cfg_key', function () {
+    $config = $app->make(Xanweb\PageInfo\Config::class);
+    $config->register...
+    
+    return $config;
+});
 
 $myConfig = $cfgManager->getConfig('my_cfg_key');
 ```
