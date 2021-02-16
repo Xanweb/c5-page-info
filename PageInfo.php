@@ -185,9 +185,23 @@ class PageInfo
     }
 
     /**
+     * Get Page Tags.
+     *
+     * @return \Concrete\Core\Entity\Attribute\Value\Value\SelectValueOption[]
+     */
+    public function getTags(): array
+    {
+        /** @var \Concrete\Core\Entity\Attribute\Value\Value\SelectValue $tags */
+        $tags = $this->page->getAttribute($this->config->getTagsAttributeKey());
+
+        return $tags !== null ? $tags->getSelectedOptions()->toArray() : [];
+    }
+
+    /**
      * Get Main Page Thumbnail.
      *
      * @param File|null $fallbackThumbnail
+     *
      * @return File|null
      */
     public function fetchThumbnail(?File $fallbackThumbnail = null): ?File

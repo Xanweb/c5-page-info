@@ -19,6 +19,11 @@ class Config
     private $akNavTarget;
 
     /**
+     * @var AttributeKey
+     */
+    private $akTags;
+
+    /**
      * @return PropertyFetcherInterface[]
      */
     private $pageNameFetchers = [];
@@ -36,7 +41,6 @@ class Config
     public function __construct(PageCategory $akc)
     {
         $this->akc = $akc;
-        $this->setNavTargetAttributeKey('nav_target');
     }
 
     /**
@@ -46,17 +50,49 @@ class Config
      */
     public function getNavTargetAttributeKey(): ?AttributeKey
     {
+        if (!$this->akNavTarget) {
+            $this->setNavTargetAttributeKey('nav_target');
+        }
+
         return $this->akNavTarget;
     }
 
     /**
-     * Set Nav Target Attribute Key.
+     * Set Nav Target Attribute Key (defaulted to 'nav_target').
      *
      * @param string $akHandle
      */
     public function setNavTargetAttributeKey(string $akHandle): void
     {
         $this->akNavTarget = $this->akc->getAttributeKeyByHandle($akHandle);
+    }
+
+    /**
+     * Get Tags attribute key.
+     *
+     * @return AttributeKey
+     */
+    public function getTagsAttributeKey(): AttributeKey
+    {
+        if (!$this->akTags) {
+            $this->setTagsAttributeKey('tags');
+        }
+
+        return $this->akTags;
+    }
+
+    /**
+     * Set Tags attribute key (defaulted to 'tags').
+     *
+     * @param string $akHandle
+     *
+     * @return Config
+     */
+    public function setTagsAttributeKey(string $akHandle): self
+    {
+        $this->akTags = $this->akc->getAttributeKeyByHandle($akHandle);
+
+        return $this;
     }
 
     /**

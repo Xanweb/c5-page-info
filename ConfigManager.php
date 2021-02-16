@@ -91,6 +91,21 @@ class ConfigManager
         return $this->getConfig($configKey);
     }
 
+    public static function getDefault(): Config
+    {
+        return static::get()->getConfig(self::DEFAULT);
+    }
+
+    public static function getBasic(): Config
+    {
+        return static::get()->getConfig(self::BASIC);
+    }
+
+    public static function getAdvanced(): Config
+    {
+        return static::get()->getConfig(self::ADVANCED);
+    }
+
     protected function registerDefaultConfig(): void
     {
         $config = $this->app(Config::class);
@@ -156,20 +171,5 @@ class ConfigManager
         );
 
         $this->register(self::ADVANCED, $config);
-    }
-
-    public static function getDefault(): Config
-    {
-        return static::get()->getConfig(self::DEFAULT);
-    }
-
-    public static function getBasic(): Config
-    {
-        return static::get()->getConfig(self::BASIC);
-    }
-
-    public static function getAdvanced(): Config
-    {
-        return static::get()->getConfig(self::ADVANCED);
     }
 }

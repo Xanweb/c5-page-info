@@ -65,11 +65,13 @@ class Factory
 
     /**
      * @param Config $config
+     *
      * @return Factory
      */
-    final public function setConfig(Config $config): Factory
+    final public function setConfig(Config $config): self
     {
         $this->config = $config;
+
         return $this;
     }
 
