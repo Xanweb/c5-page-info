@@ -70,7 +70,7 @@ class PageInfo
     {
         $pageName = '';
         foreach ($this->config->getPageNameFetchers() as $fetcher) {
-            $pageName = $fetcher->fetch($this->page);
+            $pageName = (string) $fetcher->fetch($this->page);
             if (!empty($pageName)) {
                 break;
             }
@@ -90,7 +90,7 @@ class PageInfo
     {
         $description = '';
         foreach ($this->config->getPageDescriptionFetchers() as $fetcher) {
-            $description = $fetcher->fetch($this->page);
+            $description = (string) $fetcher->fetch($this->page);
             if (!empty($description)) {
                 break;
             }
