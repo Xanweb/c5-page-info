@@ -70,9 +70,9 @@ class Config
     /**
      * Get Tags attribute key.
      *
-     * @return AttributeKey
+     * @return AttributeKey|null
      */
-    public function getTagsAttributeKey(): AttributeKey
+    public function getTagsAttributeKey(): ?AttributeKey
     {
         if (!$this->akTags) {
             $this->setTagsAttributeKey('tags');
