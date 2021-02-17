@@ -18,8 +18,14 @@ foreach ($pages as $page) {
     $pageInfo = $pageInfoFactory->build($page);
     $pageName = $pageInfo->fetchPageName(); // Page name with htmlentites applied
     $pageDescription = $pageInfo->fetchPageDescription($truncateChars); // $truncateChars: an optional argument can be passed to truncate description
-    $formattedPublishDate = $pageInfo->getPublishDate($format); // Optionally you can pass format argument ('full', 'long', 'medium' or 'short') or a php custom format 
     $thumbnail = $pageInfo->fetchThumbnail($defaultThumbnail); // By default uses 'thumbnail' attribute.
+    $formattedPublishDate = $pageInfo->getPublishDate($format); // Optionally you can pass format argument ('full', 'long', 'medium' or 'short') or a php custom format
+    $formattedPublishDateTime = $pageInfo->getPublishDateTime(); 
+    $authorUserInfo = $pageInfo->getAuthor(); 
+    $lastEditedByUserInfo = $pageInfo->getLastEditor(); 
+    $lastEditedByUserName = $pageInfo->getLastEditorUserName(); 
+    $tags = $pageInfo->getTags(); 
+    
     $linkTag = \HtmlObject\Link::create($pageInfo->getURL(), $pageName, ['target' => $pageInfo->getTarget()]);
 }
 ```
@@ -94,4 +100,12 @@ Example of using predefined config:
 ```php
 $myConfig = Xanweb\PageInfo\ConfigManager::getBasic();
 $pageInfoFactory = new Xanweb\PageInfo\Factory($myConfig);
+```
+
+## How to override PageInfo class
+```php
+class MyPageInfo extends \Xanweb\PageInfo\PageInfo {
+    
+}
+$pageInfoFactory = new Xanweb\PageInfo\Factory($myConfig, MyPageInfo::class);
 ```
