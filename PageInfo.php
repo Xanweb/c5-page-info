@@ -125,6 +125,18 @@ class PageInfo
     }
 
     /**
+     * Get Latest Version Author Name.
+     *
+     * @return string
+     */
+    public function getLastEditorUserName(): string
+    {
+        $ui = $this->getLastEditor();
+
+        return $ui !== null ? $ui->getUserDisplayName() : '';
+    }
+
+    /**
      * Get Page URL.
      *
      * @return URLInterface
