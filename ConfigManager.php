@@ -35,6 +35,7 @@ class ConfigManager
     {
         if ($config instanceof Config || is_callable($config)) {
             $this->configs[$configKey] = $config;
+            return;
         }
 
         throw new \InvalidArgumentException(t(
