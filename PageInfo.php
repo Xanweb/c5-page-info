@@ -83,10 +83,11 @@ class PageInfo
      * Get Page Description.
      *
      * @param int|null $truncateChars
+     * @param string $tail
      *
      * @return string
      */
-    public function fetchPageDescription(?int $truncateChars = null): string
+    public function fetchPageDescription(?int $truncateChars = null, string $tail = '…'): string
     {
         $description = '';
         foreach ($this->config->getPageDescriptionFetchers() as $fetcher) {
@@ -96,7 +97,7 @@ class PageInfo
             }
         }
 
-        return $truncateChars ? $this->th->shortenTextWord($description, $truncateChars) : $description;
+        return $truncateChars ? $this->th->shortenTextWord($description, $truncateChars, $tail) : $description;
     }
 
     /**
