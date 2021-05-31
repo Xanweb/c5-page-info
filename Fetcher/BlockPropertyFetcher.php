@@ -19,6 +19,13 @@ class BlockPropertyFetcher extends AbstractPropertyFetcher
     private $excludeAreas;
 
     /**
+     * List of area handles that will be included in fetching.
+     *
+     * @var array
+     */
+    private $includeAreas;
+
+    /**
      * Function to validate fetched block.
      *
      * @var callable|null
@@ -31,9 +38,10 @@ class BlockPropertyFetcher extends AbstractPropertyFetcher
      * @param string $btHandle block type handle
      * @param callable $fetchCallback function(BlockController $bcController)
      * @param callable|null $dataValidator myFunction(BlockController $bController): bool
-     * @param array|null $excludeAreas List of area handles that will be excluded from fetching
+     * @param array|null $excludeAreas List of area handles that will be excluded from fetching.
+     * @param array $includeAreas List of area handles that will be included in fetching.
      */
-    public function __construct(string $btHandle, callable $fetchCallback, ?callable $dataValidator = null, ?array $excludeAreas = null)
+    public function __construct(string $btHandle, callable $fetchCallback, ?callable $dataValidator = null, ?array $excludeAreas = null, array $includeAreas = [])
     {
         if (!class_exists(PageHelper::class)) {
             throw new \RuntimeException('Please install xanweb/c5-helpers to use BlockPropertyFetcher');
@@ -43,6 +51,7 @@ class BlockPropertyFetcher extends AbstractPropertyFetcher
         $this->fetchCallback = $fetchCallback;
         $this->excludeAreas = $excludeAreas;
         $this->dataValidator = $dataValidator;
+        $this->includeAreas = $includeAreas;
     }
 
     /**
@@ -54,7 +63,7 @@ class BlockPropertyFetcher extends AbstractPropertyFetcher
      */
     public function fetch(Page $page)
     {
-        $block = (new PageHelper($page, $this->excludeAreas))->getBlock($this->getHandle(), $this->dataValidator);
+        $block = (new PageHelper($page, $this->excludeAreas, $this->includeAreas))->getBlock($this->getHandle(), $this->dataValidator);
 
         return $block !== null ? ($this->fetchCallback)($block) : null;
     }
