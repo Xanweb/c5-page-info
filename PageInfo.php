@@ -64,19 +64,27 @@ class PageInfo
     /**
      * Get Page Name after applying htmlentities().
      *
+     * @param int|null $truncateChars
+     * @param string $tail
+     *
      * @return string
      */
-    public function fetchPageName(): string
+    public function fetchPageName(?int $truncateChars = null, string $tail = '…'): string
     {
         $pageName = '';
         foreach ($this->config->getPageNameFetchers() as $fetcher) {
             $pageName = (string) $fetcher->fetch($this->page);
             if (!empty($pageName)) {
+                $pageName = $this->th->entities($pageName);
+                if ($truncateChars) {
+                    $pageName = $this->th->shortenTextWord($pageName, $truncateChars, $tail);
+                }
+
                 break;
             }
         }
 
-        return $this->th->entities($pageName);
+        return $pageName;
     }
 
     /**
