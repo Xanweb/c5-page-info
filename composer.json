@@ -14,7 +14,7 @@
         }
     },
     "suggest": {
-        "xanweb/c5-helpers": "To use Xanweb\\PageInfo\\Fetcher\\BlockPropertyFetcher, BASIC and ADVANCED configs"
+        "xanweb/c5-helpers": "To use Xanweb\\PageInfo\\Fetcher\\BlockPropertyFetcher or Xanweb\\PageInfo\\Fetcher\\ContentImageFetcher, BASIC and ADVANCED configs"
     },
     "support": {
         "source": "https://github.com/xanweb/c5-page-info"
