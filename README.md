@@ -16,8 +16,9 @@ composer require xanweb/c5-page-info
 $pageInfoFactory = new Xanweb\PageInfo\Factory(); // We can pass our own config (Check `Config Management` section), otherwise default config will be used.
 foreach ($pages as $page) {
     $pageInfo = $pageInfoFactory->build($page);
-    $pageName = $pageInfo->fetchPageName(); // Page name with htmlentites applied
-    $pageDescription = $pageInfo->fetchPageDescription($truncateChars); // $truncateChars: an optional argument can be passed to truncate description
+    $pageName = $pageInfo->fetchPageName($truncateChars, $tail); // Page name with htmlentites applied
+                                                                //  $truncateChars: an optional argument can be passed to truncate description
+    $pageDescription = $pageInfo->fetchPageDescription($truncateChars, $tail); // $truncateChars: an optional argument can be passed to truncate description
     $thumbnail = $pageInfo->fetchThumbnail($defaultThumbnail); // By default uses 'thumbnail' attribute.
     $formattedPublishDate = $pageInfo->getPublishDate($format); // Optionally you can pass format argument ('full', 'long', 'medium' or 'short') or a php custom format
     $formattedPublishDateTime = $pageInfo->getPublishDateTime(); 
@@ -100,6 +101,11 @@ Example of using predefined config:
 ```php
 $myConfig = Xanweb\PageInfo\ConfigManager::getBasic();
 $pageInfoFactory = new Xanweb\PageInfo\Factory($myConfig);
+```
+OR
+```php
+$pageInfoFactoryWithDefaultConfig = new Xanweb\PageInfo\Factory();
+$pageInfoFactoryWithBasicConfig = $pageInfoFactoryWithDefaultConfig->withConfig('basic');
 ```
 
 ## How to override PageInfo class
