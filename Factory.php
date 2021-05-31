@@ -76,6 +76,21 @@ class Factory
     }
 
     /**
+     * Clone Current factory with defined config.
+     *
+     * @param string $configKey
+     *
+     * @return $this
+     */
+    final public function withConfig(string $configKey): self
+    {
+        $factory = clone $this;
+        $factory->setConfig(ConfigManager::config($configKey));
+
+        return $factory;
+    }
+
+    /**
      * Build PageInfo Fetcher.
      *
      * @param Page $page

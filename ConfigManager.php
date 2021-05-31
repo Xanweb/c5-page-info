@@ -62,9 +62,9 @@ class ConfigManager
     /**
      * @param string $configKey
      *
-     * @return Config|null
+     * @return Config
      */
-    public function getConfig(string $configKey): ?Config
+    public function getConfig(string $configKey): Config
     {
         if (isset($this->configs[$configKey])) {
             if (is_callable($config = $this->configs[$configKey])) {
@@ -172,5 +172,17 @@ class ConfigManager
         );
 
         $this->register(self::ADVANCED, $config);
+    }
+
+    /**
+     * Static access for get config method.
+     *
+     * @param string $configKey
+     *
+     * @return Config
+     */
+    public static function config(string $configKey): Config
+    {
+        return static::get()->getConfig($configKey);
     }
 }
