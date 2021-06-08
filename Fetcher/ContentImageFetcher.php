@@ -49,14 +49,11 @@ class ContentImageFetcher extends BlockPropertyFetcher
 
         $r = HtmlDomParser::str_get_html($content, true, true, DEFAULT_TARGET_CHARSET, false);
         if (is_object($r)) {
-            if (static::isAdvancedImageCkEditorPluginActivated()) {
-                $imageTags = $r->find('img');
-            } else {
-                $imageTags = $r->find('concrete-picture');
-            }
+            $imageTags = $r->find('img') + $r->find('concrete-picture');
 
             foreach ($imageTags as $tag) {
                 if (static::isAdvancedImageCkEditorPluginActivated()
+                    && !$tag->hasAttribute('fid')
                     && $tag->parentNode() !== null
                     && str_contains($tag->parentNode()->getAttribute('class'), 'imagewrapper')) {
                     if (str_contains($tag->src, 'CCM:FID_DL')) {
