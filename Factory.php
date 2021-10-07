@@ -2,13 +2,14 @@
 
 namespace Xanweb\PageInfo;
 
+use Concrete\Core\Application\ApplicationAwareTrait;
 use Concrete\Core\Page\Page;
+use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\Url\Resolver\PageUrlResolver;
-use Xanweb\Common\Traits\ApplicationTrait;
 
 class Factory
 {
-    use ApplicationTrait;
+    use ApplicationAwareTrait;
 
     /**
      * @var PageUrlResolver
@@ -47,10 +48,10 @@ class Factory
             throw new \InvalidArgumentException(t('%s:%s - `%s` should be a subclass of `%s`', static::class, '__construct', $pageInfoClass, PageInfo::class));
         }
 
-        $app = $this->app();
-        $this->urlResolver = $app->make(PageUrlResolver::class);
-        $this->dh = $app->make('date');
-        $this->th = $app->make('helper/text');
+        $this->setApplication(Application::getFacadeApplication());
+        $this->urlResolver = $this->app->make(PageUrlResolver::class);
+        $this->dh = $this->app->make('date');
+        $this->th = $this->app->make('helper/text');
         $this->config = $config ?? ConfigManager::getDefault();
         $this->pageInfoClass = $pageInfoClass;
     }
